@@ -14,7 +14,7 @@
 1. 克隆仓库：
 
    ```
-   git clone [仓库URL]
+   git clone https://github.com/Jiabinone/notdiamond2api.git
    cd notdiamond2api
    ```
 
