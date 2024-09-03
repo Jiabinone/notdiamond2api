@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - ./next_action.txt:/app/next_action.txt
+      - ./cookies.txt:/app/cookies.txt
+    environment:
+      - PORT=3000

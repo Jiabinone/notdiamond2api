@@ -1,0 +1,26 @@
+# 虚拟环境
+venv/
+.venv/
+env/
+*.pyc
+__pycache__/
+
+# 其他常见的不需要包含在Docker镜像中的文件
+.git
+.gitignore
+.vscode/
+*.log
+*.sqlite3
+
+# 开发和测试文件
+tests/
+*.test.py
+*.spec
+
+# 文档
+README.md
+docs/
+
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
