@@ -9,6 +9,22 @@
 - 兼容 OpenAI API 格式
 - 支持 Docker 部署
 
+## 支持的模型
+
+目前支持以下模型：
+
+- gpt-4o
+- gpt-4-turbo-2024-04-09
+- gpt-4o-mini
+- claude-3-haiku-20240307
+- claude-3-5-sonnet-20240620
+- gemini-1.5-pro-latest
+- gemini-1.5-pro-exp-0801
+- Meta-Llama-3.1-70B-Instruct-Turbo
+- Meta-Llama-3.1-405B-Instruct-Turbo
+- llama-3.1-sonar-large-128k-online
+- mistral-large-2407
+
 ## 快速开始
 
 1. 克隆仓库：
@@ -35,7 +51,7 @@
 3. 使用 Docker Compose 启动服务：
 
    ```
-   docker-compose up --build
+    docker-compose up --build -d && docker-compose logs -f
    ```
 
 4. 服务将在 `http://localhost:3000` 上运行
