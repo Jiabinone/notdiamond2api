@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, Response
+from flask_cors import CORS
 import requests
 import json
 import re
@@ -6,6 +7,7 @@ import time
 import os
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 定义全局模型映射列表，将外部模型名称映射到内部模型标识符
 MODEL_MAPPINGS = {
@@ -126,8 +128,6 @@ def create_openai_response(data, content, stream=False, is_last=False, full_cont
             "total_tokens": len(data["messages"][0]["content"]) + (len(full_content) if full_content is not None else len(content))
         }
     return response
-
-
 
 @app.route('/v1/models', methods=['GET'])
 def proxy_models():
