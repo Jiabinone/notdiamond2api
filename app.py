@@ -116,7 +116,7 @@ def create_openai_response(data, content, stream=False, is_last=False, full_cont
                     "role": "assistant",
                     "content": content
                 },
-                "finish_reason": "stop" if is_last else None
+                "finish_reason": "stop" if is_last else "" 
             }
         ]
     }
@@ -150,7 +150,6 @@ def proxy_request():
     data = request.json or {}
     if not isinstance(data, dict):
         data = {}
-    print(data)  # 打印接收到的请求数据
     # 将外部模型名称映射到内部模型标识符
     if 'model' in data and data['model'] in MODEL_MAPPINGS:
         data['model'] = MODEL_MAPPINGS[data['model']]
@@ -159,7 +158,7 @@ def proxy_request():
     if isinstance(response, Response):
         return response
     else:
-        return jsonify(response)
+        return jsonify(response), 200, {'Content-Type': 'application/json; charset=utf-8'}
 
 
 if __name__ == "__main__":
