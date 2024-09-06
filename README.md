@@ -5,6 +5,7 @@
 ## 功能特点
 
 - 支持多种 AI 模型的映射
+- 使用 LRU 缓存优化数据读取和请求头的性能
 - 处理流式和非流式响应
 - 兼容 OpenAI API 格式
 - 支持 Docker 部署
@@ -34,19 +35,18 @@
    cd notdiamond2api
    ```
 
-2. 创建并填写必要的配置文件：
+2. 确保已经设置好以下环境变量或文件：
 
-   - `next_action.txt`：包含 next-action 值
-   - `cookies.txt`：包含 cookie 信息
+   - `COOKIES`：包含 cookie 信息或文件 `cookies.txt`。
+   - `NEXT_ACTION`：包含 next-action 值或文件 `next_action.txt`。
 
-   获取这些值的方法：
+   这些信息可通过以下步骤获取：
    1. 登录 chat.notdiamond.ai
    2. 打开浏览器开发者工具（F12）
    3. 在网站上发送一个问题
    4. 在网络面板中找到对应的请求
    5. 在请求头中找到 `next-action` 和 `cookie` 的值
-   6. 将这些值分别复制到 `next_action.txt` 和 `cookies.txt` 文件中
-   7. 如文件不存在则在项目目录创建即可
+   6. 将这些值分别设置为 `NEXT_ACTION` 和 `COOKIES` 环境变量，或者写入到对应的文件
 
 3. 使用 Docker Compose 启动服务：
 
@@ -63,9 +63,19 @@
 
 ## 配置
 
-- 在 `app.py` 中的 `MODEL_MAPPINGS` 字典中定义模型映射
+- 在 `app.py` 中的 `MODEL_INFO` 字典中定义模型映射
 - 环境变量：
   - `PORT`：指定服务运行的端口（默认为 5000）
+
+## 环境变量支持
+
+在部署和运行服务时，可以通过设置以下环境变量来调整服务的配置：
+
+- **PORT**：设置 Flask 应用运行的端口，默认为 `5000`。
+- **COOKIES**：存储 cookie 信息。
+- **NEXT_ACTION**：存储 next-action 值。
+
+确保这些环境变量根据您的部署环境进行相应的设置。如果未设置环境变量，系统将尝试从 `cookies.txt` 和 `next_action.txt` 文件中读取对应的信息。
 
 ## 文件结构
 
@@ -73,14 +83,41 @@
 - `Dockerfile`：Docker 镜像构建文件
 - `docker-compose.yml`：Docker Compose 配置文件
 - `requirements.txt`：Python 依赖列表
-- `next_action.txt`：存储 next-action 值
-- `cookies.txt`：存储 cookie 信息
 
 ## 注意事项
 
-- 确保 `next_action.txt` 和 `cookies.txt` 文件包含正确的信息
 - 本服务仅用于代理请求，不包含实际的 AI 模型
-- 定期更新 `next_action.txt` 和 `cookies.txt` 中的值，因为它们可能会过期
+- 定期检查和更新环境变量中的 `COOKIES` 和 `NEXT_ACTION` 值，因为它们可能会过期
+
+## 开发指南
+
+1. 创建并激活虚拟环境（可选但推荐）：
+
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # 对于 Windows 使用 venv\Scripts\activate
+   ```
+
+2. 安装依赖：
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. 运行开发服务器：
+
+   ```bash
+   export FLASK_ENV=development
+   flask run
+   ```
+
+   或者直接使用 Python 运行：
+
+   ```bash
+   python app.py
+   ```
+
+4. 进行代码修改和调试。
 
 ## 贡献
 
