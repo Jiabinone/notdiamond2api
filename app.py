@@ -7,13 +7,25 @@ import random
 import requests
 from flask import Flask, request, Response, stream_with_context, jsonify
 from flask_cors import CORS
-from functools import lru_cache
+from functools import lru_cache,wraps
 from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 executor = ThreadPoolExecutor(max_workers=10)
+
+API_KEY =  "sk-liunxdo"
+
+def require_api_key(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        api_key = request.headers.get('Authorization')
+        if api_key and api_key == f"Bearer {API_KEY}":
+            return f(*args, **kwargs)
+        else:
+            return jsonify({"error": "Invalid or missing API key"}), 401
+    return decorated_function
 
 # 使用LRU缓存，最大容量为10，用于缓存文件内容
 @lru_cache(maxsize=10)
@@ -52,6 +64,10 @@ def get_notdiamond_headers():
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
         'cookie': get_env_or_file('COOKIES', 'cookies.txt')
     }
+
+@lru_cache(maxsize=1)
+def getAuthorizationKey():
+    return get_env_or_file('API_KEY', 'API_KEY.txt')
 
 # 模型信息字典，包含各模型的提供商和映射
 MODEL_INFO = {
@@ -212,6 +228,7 @@ def generate_stream_response(response, model):
 
 # 获取模型列表的API
 @app.route('/v1/models', methods=['GET'])
+@require_api_key
 def proxy_models():
     models = [
         {
@@ -227,6 +244,7 @@ def proxy_models():
 
 # 处理请求的API
 @app.route('/v1/chat/completions', methods=['POST'])
+@require_api_key
 def handle_request():
     try:
         request_data = request.get_json()
@@ -274,5 +292,7 @@ def handle_request():
         }), 500
 
 if __name__ == '__main__':
+    if(getAuthorizationKey()):
+        API_KEY = getAuthorizationKey()
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host='0.0.0.0', port=port, threaded=True)
