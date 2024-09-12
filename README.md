@@ -36,6 +36,8 @@
    ```
 
 2. 确保已经设置好以下环境变量或文件：
+   - `USER_ID`：唯一用户标识符或文件 `user_id.txt`。
+     - 从浏览器的cookie选项中查找，找到以`ph_phc_`开头的cookie项，其中的`distinct_id`字段即为`user_id`。注意：`user_id`不应该被url编码。
 
    - `COOKIES`：包含 cookie 信息或文件 `cookies.txt`。
    - `NEXT_ACTION`：包含 next-action 值或文件 `next_action.txt`。

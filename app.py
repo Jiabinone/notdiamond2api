@@ -421,22 +421,27 @@ def handle_request():
         request_data = request.get_json()
         messages = request_data.get('messages', [])
         model_id = request_data.get('model', '')
-        model = MODEL_INFO.get(model_id, {}).get('mapping', model_id)
+        model_info = MODEL_INFO.get(model_id, {})
+        user_id = get_env_or_file('USER_ID', 'user_id.txt')
         stream = request_data.get('stream', False)
 
         prompt_tokens = count_message_tokens(messages, request_data.get('model', 'gpt-4o'))
 
+        headers = get_notdiamond_headers()
+        
         payload = {
             "messages": messages,
-            "model": model,
+            "provider": {
+                "model": model_id,
+                "provider": model_info.get('provider', '')
+            },
             "stream": stream,
             "frequency_penalty": request_data.get('frequency_penalty', 0),
             "presence_penalty": request_data.get('presence_penalty', 0),
             "temperature": request_data.get('temperature', 0.8),
-            "top_p": request_data.get('top_p', 1)
+            "top_p": request_data.get('top_p', 1),
+            "user_id": user_id
         }
-
-        headers = get_notdiamond_headers()
         url = get_notdiamond_url()
         
         future = executor.submit(requests.post, url, headers=headers, json=[payload], stream=True)
