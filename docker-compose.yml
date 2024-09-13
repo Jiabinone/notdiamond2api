@@ -9,5 +9,6 @@ services:
       - .:/app
       - ./next_action.txt:/app/next_action.txt
       - ./cookies.txt:/app/cookies.txt
+      - ./user_id.txt:/app/user_id.txt
     environment:
       - PORT=3000

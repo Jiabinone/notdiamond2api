@@ -89,7 +89,9 @@ ENV/
 # 项目特定文件
 next_action.txt
 cookies.txt
+user_id.txt
 
 # 操作系统生成的文件
 .DS_Store
 Thumbs.db
+.aider*
