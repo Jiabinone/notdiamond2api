@@ -49,6 +49,8 @@
    - `AUTH_EMAIL`：您的登录邮箱。
    - `AUTH_PASSWORD`：您的登录密码。
    - `PORT`：启动端口，默认为 3000。如需更改，请在 `docker-compose.yml` 中修改 `ports` 映射设置中的第一项。
+   - `AUTH_ENABLED`: 是否启用验证。
+   - `AUTH_TOKEN`: 使用的身份令牌。
 
 3. 使用 Docker Compose 启动：
 
