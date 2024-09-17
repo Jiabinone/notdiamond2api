@@ -7,3 +7,5 @@ services:
       - PORT=3000
       - AUTH_EMAIL=your_email@example.com
       - AUTH_PASSWORD=your_password
+      - AUTH_ENABLED=true
+      - AUTH_TOKEN=your_token_here
