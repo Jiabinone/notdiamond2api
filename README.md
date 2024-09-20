@@ -70,6 +70,11 @@
 
 2024-09-20
 1. 修复登录空值问题
+2. 添加 Cloudflare Workers 部署方式，支持 4 个环境变量：
+   - `AUTH_ENABLED`（可选）
+   - `AUTH_VALUE`（可选，需搭配 `AUTH_ENABLED`）
+   - `AUTH_EMAIL`（必填）
+   - `AUTH_PASSWORD`（必填）
 
 ## 许可证
 
