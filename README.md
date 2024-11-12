@@ -20,11 +20,11 @@
 - gpt-4o
 - gpt-4-turbo-2024-04-09
 - gpt-4o-mini
-- claude-3-haiku-20240307
-- claude-3-5-sonnet-20240620
+- claude-3-5-haiku-20241022
+- claude-3-5-sonnet-20241022
 - gemini-1.5-pro-latest
-- gemini-1.5-pro-exp-0801
-- Meta-Llama-31-70B-Instruct-Turbo
+- gemini-1.5-flash-latest
+- Meta-Llama-3.1-70B-Instruct-Turbo
 - Meta-Llama-3.1-405B-Instruct-Turbo
 - llama-3.1-sonar-large-128k-online
 - mistral-large-2407
@@ -67,6 +67,9 @@
 
 
 ## 更新日志
+2024-11-12
+1. 更新模型映射
+
 2024-10-14
 1. 修复workers输出乱码的情况
 
