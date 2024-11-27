@@ -22,6 +22,7 @@
 - gpt-4o-mini
 - claude-3-5-haiku-20241022
 - claude-3-5-sonnet-20241022
+- chatgpt-4o-latest
 - gemini-1.5-pro-latest
 - gemini-1.5-flash-latest
 - Meta-Llama-3.1-70B-Instruct-Turbo
@@ -67,8 +68,11 @@
 
 
 ## 更新日志
-2024-11-12
-1. 更新模型映射
+2024-11-27
+1. 添加模型chatgpt-4o-latest
+2. 修复workers版的v1/models请求
+3. 添加发起请求时检查模型是否支持
+4. 更新模型映射
 
 2024-10-14
 1. 修复workers输出乱码的情况

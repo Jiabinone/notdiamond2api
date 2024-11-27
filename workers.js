@@ -44,6 +44,10 @@
         "mistral-large-2407": {
             "provider": "mistral",
             "mapping": "mistral.mistral-large-2407-v1:0"
+        },
+        "chatgpt-4o-latest": {
+            "provider": "openai",
+            "mapping": "chatgpt-4o-latest"
         }
     };
     async function parseRequestBody(request) {
@@ -220,9 +224,48 @@
             return respondWithOptions(event);
         } else if (url.pathname === "/v1/chat/completions") {
             return handleCompletions(event);
+        } else if (event.request.method === "GET" && url.pathname === "/v1/models") {
+            return handleModels(event);
         } else {
             return respondWithNotFound(event);
         }
+    }
+    function handleModels(event) {
+        const timestamp = Math.floor(Date.now() / 1e3);
+        const models = Object.keys(MODEL_INFO).map((id) => ({
+            id,
+            object: "model",
+            created: timestamp,
+            owned_by: MODEL_INFO[id].provider,
+            parent: null,
+            permission: [
+                {
+                    allow_create_engine: true,
+                    allow_fine_tuning: false,
+                    allow_logprobs: true,
+                    allow_sampling: true,
+                    allow_search_indices: false,
+                    allow_view: true,
+                    created: timestamp,
+                    group: null,
+                    id: `modelperm-${Math.random().toString(36).substr(2, 24)}`,
+                    is_blocking: false,
+                    object: "model_permission",
+                    organization: "*"
+                }
+            ],
+            root: id
+        }));
+        const response = {
+            data: models,
+            object: "list"
+        };
+        return event.respondWith(new Response(JSON.stringify(response), {
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        }));
     }
     function respondWithOptions(event) {
         return event.respondWith(new Response(null, {
@@ -276,6 +319,15 @@
         const stream = parsedRequestBody.stream || false;
         const payload = createPayload(parsedRequestBody);
         const model = payload.model;
+        if (model === void 0) {
+            return new Response(JSON.stringify({ error: "\u4E0D\u652F\u6301\u7684\u6A21\u578B,\u901A\u8FC7 /v1/models \u83B7\u53D6\u652F\u6301\u7684\u6A21\u578B" }), {
+                status: 400,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
+        }
         const response = await makeRequest(payload, stream, model);
         if (response.status === 401) {
             return response;
