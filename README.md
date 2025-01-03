@@ -1,4 +1,5 @@
 # notdiamond2api
+> **⚠️ 此项目不再维护**
 
 这是一个基于 Flask 的 聊天代理服务，用于将请求转发到 chat.notdiamond.ai 服务器。
 
